@@ -35,7 +35,7 @@ public class UDPTracker {
     Map<String, Integer> scrapeResponse;
     Map<String, Integer> announceResponse;
     private DatagramSocket clientSocket;
-    //TODO: Random number for peer_id
+    //TODO: Random number for peer_id, insert it from client
     private String peer_id = "-JP0001-456726789357";
 
     public UDPTracker(int port, String dns, int hostPort) throws UnknownHostException, SocketException {

@@ -14,7 +14,7 @@ public class Main {
         Random random = new Random(100);
         int transId = random.nextInt(10000);
         try {
-            TorrentFile torrentFile = new TorrentFile("src/main/resources/unsort_dict.torrent");
+            TorrentFile torrentFile = new TorrentFile("src/main/resources/mma_the_rest_on_the_flight_into_egypt_438025_archive.torrent");
             System.out.println(torrentFile.hash());
         } catch (Exception e) {
             e.printStackTrace();
