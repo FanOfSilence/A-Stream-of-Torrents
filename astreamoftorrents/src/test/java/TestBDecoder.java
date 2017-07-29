@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -76,16 +77,5 @@ public class TestBDecoder {
 //            System.out.println(entry.getKey());
 //            System.out.println(entry.getValue());
 //        }
-    }
-
-    @Test
-    public void testByteString() throws Exception {
-        InputStream dictInputStream = IOUtils.toInputStream("d8:completei0e10:downloadedi0e10:incompletei1e8:intervali1901e12:min intervali950e5:peers6:Q\\354\\251\\253\\032\\341e",
-                "ISO-8859-1");
-        decoder = new BDecoder(dictInputStream, "ISO-8859-1");
-        BDict dict = decoder.decodeDict();
-        Map<String, Object> map = dict.getValue();
-        Object peers = map.get("peers");
-        System.out.println(peers.getClass());
     }
 }

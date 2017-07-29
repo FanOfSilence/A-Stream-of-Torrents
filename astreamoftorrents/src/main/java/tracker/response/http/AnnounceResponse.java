@@ -4,6 +4,8 @@ import bencode.BDecoder;
 import bencode.type.BDict;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,14 +19,26 @@ public class AnnounceResponse {
         BDecoder decoder = new BDecoder(inputStream, "UTF-8");
         BDict dict = decoder.decodeDict();
         announceMap = dict.stringify();
-        parsePeers(dict);
+        if (!hasFailed()) {
+            parsePeers(dict);
+        }
     }
 
-    private void parsePeers(BDict dict) {
+    private void parsePeers(BDict dict) throws Exception {
         byte[] peerBytes = (byte[]) dict.getValue().get("peers");
-        for (int i = 0; i < peerBytes.length; i += IP_AND_PORT_OFFSET) {
-            //TODO: parse out the ip from first 4 bytes and the port from last 2
+        if (peerBytes.length % 6 != 0) {
+            throw new Exception("Peers in announce response are of illegal length");
         }
+        List<String> peerList = new ArrayList<>();
+        for (int i = 0; i < peerBytes.length; i += IP_AND_PORT_OFFSET) {
+            int portHigh = Byte.toUnsignedInt(peerBytes[i + 4]);
+            int portLow = Byte.toUnsignedInt(peerBytes[i + 5]);
+            //Parses the peerBytes into a String of the form '127.0.0.1:8080'
+            peerList.add(String.format("%d.%d.%d.%d:%d", Byte.toUnsignedInt(peerBytes[i]),
+                    Byte.toUnsignedInt(peerBytes[i + 1]), Byte.toUnsignedInt(peerBytes[i + 2]),
+                    Byte.toUnsignedInt(peerBytes[i + 3]), (portHigh << 8) + portLow));
+        }
+        announceMap.put("peers", peerList);
     }
 
     public boolean hasFailed() {
