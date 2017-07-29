@@ -1,9 +1,12 @@
 package bencode;
 
 import bencode.type.*;
+import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,14 +24,25 @@ public class BDecoder {
 
     private InputStream inputStream;
     private Charset charset;
-    public BDecoder(InputStream inputStream, String charset) {
-        this.inputStream = inputStream;
+    public BDecoder(InputStream inputStream, String charset) throws IOException {
+        if (inputStream.markSupported()) {
+            this.inputStream = inputStream;
+        } else {
+            byte[] b = IOUtils.toByteArray(inputStream);
+//            inputStream.read(b);
+            this.inputStream = new ByteArrayInputStream(b);
+        }
         this.charset = Charset.forName(charset);
     }
 
     public BDecoder(InputStream inputStream) {
         this.inputStream = inputStream;
     }
+
+//    public BDecoder(byte[] b, String charset) {
+//        this.inputStream = new ByteArrayInputStream(b);
+//        this.charset = Charset.forName(charset);
+//    }
 
     public BInteger decodeInteger() throws IOException, Exception {
         int prefix = inputStream.read();
@@ -71,13 +85,23 @@ public class BDecoder {
         int length = getStringLength();
 
         byte[] b = new byte[length];
-        inputStream.read(b, 0, length);
+
+        int read = 0;
+        while (read < length)
+        {
+            int i = inputStream.read(b, read, length - read);
+            read += i;
+        }
+//        for (int i = 0; i < length; i++) {
+//            b[i] = (byte) inputStream.read();
+//        }
+//        inputStream.read(b, 0, length);
         return new BString(b, charset);
     }
 
 //    public String getEncodedString(byte[] bytes) throws Exception {
 //        if (charset == null) {
-//            throw new Exception("Need to specfiy a charset to get a string");
+//            throw new Exception("Need to specfiy a charset to announce a string");
 //        }
 //        return new String(bytes, charset);
 //    }

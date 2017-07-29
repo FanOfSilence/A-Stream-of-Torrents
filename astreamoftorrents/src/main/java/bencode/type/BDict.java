@@ -41,4 +41,9 @@ public class BDict<T extends Map> implements BType {
     public void encode(OutputStream os) {
 
     }
+
+    @Override
+    public String toString() {
+        return "BDict";
+    }
 }

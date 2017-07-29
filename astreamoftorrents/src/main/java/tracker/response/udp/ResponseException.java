@@ -1,4 +1,4 @@
-package tracker.response;
+package tracker.response.udp;
 
 /**
  * Created by Jesper on 2017-07-23.

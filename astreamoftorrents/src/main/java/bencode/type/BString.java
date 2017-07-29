@@ -34,4 +34,8 @@ public class BString<T extends String> implements BType {
     public void encode(OutputStream os) {
 
     }
+    @Override
+    public String toString() {
+        return "BString";
+    }
 }

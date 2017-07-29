@@ -33,6 +33,11 @@ public class BInteger<T extends Integer> implements BType {
 
     }
 
+    @Override
+    public String toString() {
+        return "BInteger";
+    }
+
     private boolean isNumber(int number) {
         return number >= '0' && number <= '9';
     }

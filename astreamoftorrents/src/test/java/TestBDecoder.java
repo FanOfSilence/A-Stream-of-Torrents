@@ -1,8 +1,10 @@
 import bencode.BDecoder;
+import bencode.type.BDict;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,7 @@ public class TestBDecoder {
     public void testList() throws Exception {
         String stringPart = "Spam";
         int intPart = 42435;
-        InputStream listInputStream = IOUtils.toInputStream(String.format("l4:%si%dee", stringPart, intPart));
+        InputStream listInputStream = IOUtils.toInputStream(String.format("l4:%si%dee", stringPart, intPart), "UTF-8");
         decoder = new BDecoder(listInputStream, "UTF-8");
         List after = decoder.decodeList().stringify();
         assert (after.size() == 2);
@@ -60,13 +62,13 @@ public class TestBDecoder {
         InputStream listInputStream = IOUtils.toInputStream(listString);
         decoder = new BDecoder(listInputStream, "UTF-8");
 //        List after = decoder.decodeList();
-//        System.out.println(decoder.getEncodedString((byte[]) ((List)after.get(1)).get(0)));
+//        System.out.println(decoder.getEncodedString((byte[]) ((List)after.announce(1)).announce(0)));
     }
 
     @Test
     public void testDict() throws Exception {
 //        String key0 = "info";
-        InputStream dictInputStream = IOUtils.toInputStream("d4:infod6:lengthi1e4:name5:a.txt12:piece lengthi32768e6:pieces20:1234567890abcdefghijee");
+        InputStream dictInputStream = IOUtils.toInputStream("d4:infod6:lengthi1e4:name5:a.txt12:piece lengthi32768e6:pieces20:1234567890abcdefghijee", "UTF-8");
         decoder = new BDecoder(dictInputStream, "UTF-8");
 //        Map<String, Object> after = decoder.decodeDict();
 //        for (Map.Entry entry : after.entrySet()) {
@@ -77,7 +79,13 @@ public class TestBDecoder {
     }
 
     @Test
-    public void testByteString() {
-//        byte[] string =
+    public void testByteString() throws Exception {
+        InputStream dictInputStream = IOUtils.toInputStream("d8:completei0e10:downloadedi0e10:incompletei1e8:intervali1901e12:min intervali950e5:peers6:Q\\354\\251\\253\\032\\341e",
+                "ISO-8859-1");
+        decoder = new BDecoder(dictInputStream, "ISO-8859-1");
+        BDict dict = decoder.decodeDict();
+        Map<String, Object> map = dict.getValue();
+        Object peers = map.get("peers");
+        System.out.println(peers.getClass());
     }
 }
