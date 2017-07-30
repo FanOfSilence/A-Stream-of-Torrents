@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static bencode.Constants.*;
 
@@ -49,15 +46,21 @@ public class BDecoder {
         if (prefix != INTEGER_PREFIX) {
             throw new Exception(String.format("Integer has to be prefixed by '%c'", INTEGER_PREFIX));
         }
-        int result = 0;
+        long result = 0;
         int next = inputStream.read();
         while (next != INTEGER_POSTFIX) {
             result *= 10;
             if (!isNumber(next)) {
                 throw new Exception("Integer can only contain numbers");
             }
+            if (next - UTF_OFFSET == 45 || next - UTF_OFFSET == '-') {
+                System.out.println("awdadwa");
+            }
             result += next - UTF_OFFSET;
             next = inputStream.read();
+        }
+        if (result >= 1343715223) {
+            System.out.println("So it did!");
         }
         return new BInteger(result);
     }
@@ -71,8 +74,10 @@ public class BDecoder {
 
         int next = peek();
         while (next != DICT_POSTFIX) {
-//            String key = getEncodedString(decodeByteString());
             String key = decodeByteString().stringify();
+            if (key.equals("length")) {
+                System.out.println("STOP HERE");
+            }
             BType value = decodeObject();
             dict.put(key, value);
             next = peek();
@@ -84,31 +89,13 @@ public class BDecoder {
     public BString decodeByteString() throws IOException, Exception {
         int length = getStringLength();
 
+
         byte[] b = new byte[length];
 
         int read = 0;
-        while (read < length)
-        {
-            int i = inputStream.read(b, read, length - read);
-            read += i;
-        }
-//        for (int i = 0; i < length; i++) {
-//            b[i] = (byte) inputStream.read();
-//        }
-//        inputStream.read(b, 0, length);
+        inputStream.read(b, 0, length);
         return new BString(b, charset);
     }
-
-//    public String getEncodedString(byte[] bytes) throws Exception {
-//        if (charset == null) {
-//            throw new Exception("Need to specfiy a charset to announce a string");
-//        }
-//        return new String(bytes, charset);
-//    }
-
-//    public String getEncodedString(byte[] bytes, String charset) throws Exception {
-//        return new String(bytes, charset);
-//    }
 
     private int getStringLength() throws IOException, Exception {
         int length = 0;
@@ -134,8 +121,6 @@ public class BDecoder {
         inputStream.read();
         return new BList(result);
     }
-
-//    }
 
     public BType decodeObject() throws IOException, Exception {
         int next = peek();

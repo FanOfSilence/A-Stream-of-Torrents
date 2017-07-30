@@ -36,7 +36,7 @@ public class TestBEncoder {
 
     @Test
     public void testInteger() throws IOException {
-        Integer number = 3434343;
+        Long number = 3434343L;
         String numberString = "3434343";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BEncoder encoder = new BEncoder(baos, "UTF-8");

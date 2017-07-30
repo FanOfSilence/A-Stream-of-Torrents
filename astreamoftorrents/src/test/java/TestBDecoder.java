@@ -41,7 +41,7 @@ public class TestBDecoder {
         int testInt = 43535;
         InputStream intInputStream = IOUtils.toInputStream(String.format("i%de", testInt), "UTF-8");
         decoder = new BDecoder(intInputStream, "UTF-8");
-        int after = (int) decoder.decodeInteger().getValue();
+        Long after = (long) decoder.decodeInteger().getValue();
         assert (after == testInt);
     }
 
@@ -60,7 +60,7 @@ public class TestBDecoder {
     @Test
     public void testListWithinList() throws Exception {
         String listString = "ll36:http://bt1.archive.org:6969/announceel36:http://bt2.archive.org:6969/announceee";
-        InputStream listInputStream = IOUtils.toInputStream(listString);
+        InputStream listInputStream = IOUtils.toInputStream(listString, "UTF-8");
         decoder = new BDecoder(listInputStream, "UTF-8");
 //        List after = decoder.decodeList();
 //        System.out.println(decoder.getEncodedString((byte[]) ((List)after.announce(1)).announce(0)));

@@ -5,16 +5,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import torrent.ReadableTorrentState;
+import tracker.response.http.AnnounceResponse;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 //TODO: Tracker should have a method to see if it was connectable for future keep-alive messages
 
@@ -46,7 +42,7 @@ public class HttpTracker {
         this.torrent = torrent;
     }
 
-    public InputStream announce(byte[] hash) throws URISyntaxException, IOException, Exception {
+    public AnnounceResponse announce(byte[] hash) throws URISyntaxException, IOException, Exception {
         URIBuilder uriBuilder = new URIBuilder(ip).setCharset(Charset.forName("ISO-8859-1"));
         uriBuilder.setParameter(INFO_HASH, new String(hash, "ISO-8859-1"));
         uriBuilder.setParameter(PEER_ID, id);
@@ -59,11 +55,12 @@ public class HttpTracker {
         uriBuilder.setParameter(NUMWANT, "200");
 
         URI uri = uriBuilder.build();
+        System.out.println(uri.toString());
 
         HttpGet get = new HttpGet(uri);
         HttpResponse response = client.execute(get);
         if (response.getStatusLine().getStatusCode() == 200) {
-            return response.getEntity().getContent();
+            return new AnnounceResponse(response.getEntity().getContent());
         }
         throw new Exception(String.format("Got back a %d response when announcing", response.getStatusLine().getStatusCode()));
     }

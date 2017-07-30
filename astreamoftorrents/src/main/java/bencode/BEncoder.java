@@ -36,7 +36,7 @@ public class BEncoder {
         outputStream.write(decodedBytes);
     }
 
-    public void encodeInteger(Integer decodedInteger) throws IOException {
+    public void encodeInteger(Long decodedInteger) throws IOException {
         outputStream.write(INTEGER_PREFIX);
         outputStream.write(decodedInteger.toString().getBytes(charset));
         outputStream.write(INTEGER_POSTFIX);
@@ -64,8 +64,8 @@ public class BEncoder {
             encodeString((String) decodedObject);
         } else if (decodedObject instanceof byte[]) {
             encodeByteString((byte[]) decodedObject);
-        } else if (decodedObject instanceof Integer) {
-            encodeInteger((Integer) decodedObject);
+        } else if (decodedObject instanceof Long) {
+            encodeInteger((Long) decodedObject);
         } else if (decodedObject instanceof List) {
             encodeList((List) decodedObject);
         } else if (decodedObject instanceof Map) {

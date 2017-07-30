@@ -7,7 +7,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.util.*;
 
 /**
  * Created by Jesper on 2017-07-09.
@@ -36,28 +37,12 @@ public class TorrentFile {
             encoder.encodeDict(infoMap);
             byteHash = DigestUtils.sha1(baos.toByteArray());
             hash = DigestUtils.sha1Hex(baos.toByteArray());
+            System.out.println(baos.toByteArray()[baos.toByteArray().length - 2]);
             System.out.println(hash);
         }
         return hash;
     }
-    //TODO:GEneralise to become recursive
-    private void stringifyValues(BDecoder decoder, Object decodedObject) throws Exception {
-        if (decodedObject instanceof Map) {
-            for (Object entry : ((Map<String, Object>) decodedObject).entrySet()) {
-//                ((Map) decodedObject).put(entry.)
-            }
-        }
-        for (Map.Entry entry : torrentMap.entrySet()) {
-//            if (entry.getValue() instanceof List) {
-//                for (Object object : (List) entry.getValue()) {
-//                    ((List) entry.getValue()).remove(object);
-//                    ((List) entry.getValue()).add(decoder.getEncodedString((byte[]) object));
-//
-//                }
-//            }
-        }
-//        torrentMap.put("announce", decoder.getEncodedString((byte[]) torrentMap.announce("announce")));
-    }
+
     public void readManifest() throws IOException, Exception {
         byte[] fileBytes = FileUtils.readFileToByteArray(file);
         ByteArrayInputStream bis = new ByteArrayInputStream(fileBytes);
@@ -65,19 +50,7 @@ public class TorrentFile {
         BDict dict = decoder.decodeDict();
         torrentMap = dict.getValue();
         infoMap = (Map<String, Object>) torrentMap.get("info");
-//        for (Map.Entry entry : valueMap.entrySet()) {
-//            System.out.println(entry.getKey());
-//            System.out.println(entry.getValue());
-//        }
-//        System.out.println(hash());
-
-//        infoMap = (Map<String, Object>) torrentMap.announce("info");
         stringMap = dict.stringify();
-//        stringifyValues(decoder);
-//        for (Map.Entry entry : stringMap.entrySet()) {
-//            System.out.println(entry.getKey());
-//            System.out.println(entry.getValue());
-//        }
     }
 
     public Map<String, Object> getTorrentMap() {

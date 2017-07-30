@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class AnnounceResponse {
     Map<String, Object> announceMap;
-    private static final int IP_AND_PORT_OFFSET = 5;
+    private static final int IP_AND_PORT_OFFSET = 6;
 
     public AnnounceResponse(InputStream inputStream) throws Exception {
         BDecoder decoder = new BDecoder(inputStream, "UTF-8");
@@ -26,7 +26,7 @@ public class AnnounceResponse {
 
     private void parsePeers(BDict dict) throws Exception {
         byte[] peerBytes = (byte[]) dict.getValue().get("peers");
-        if (peerBytes.length % 6 != 0) {
+        if (peerBytes.length % IP_AND_PORT_OFFSET != 0) {
             throw new Exception("Peers in announce response are of illegal length");
         }
         List<String> peerList = new ArrayList<>();

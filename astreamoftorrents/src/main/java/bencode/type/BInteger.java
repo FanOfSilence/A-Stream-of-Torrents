@@ -8,23 +8,23 @@ import java.io.OutputStream;
 /**
  * Created by Jesper on 2017-07-19.
  */
-public class BInteger<T extends Integer> implements BType {
+public class BInteger<T extends Long> implements BType {
     static final char INTEGER_PREFIX = 'i';
     static final char INTEGER_POSTFIX = 'e';
-    private Integer number;
+    private Long number;
     private static final int UTF_OFFSET = 48;
 
-    public BInteger(Integer number) {
+    public BInteger(Long number) {
         this.number = number;
     }
 
     @Override
-    public Integer stringify() {
+    public Long stringify() {
         return number;
     }
 
     @Override
-    public Object getValue() {
+    public Long getValue() {
         return number;
     }
 

@@ -7,10 +7,12 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import torrent.TorrentFile;
 import torrent.TorrentState;
 import tracker.HttpTracker;
+import tracker.response.http.AnnounceResponse;
 
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -30,26 +32,18 @@ public class Main {
             CloseableHttpClient httpClient = HttpClients.custom()
                     .setConnectionManager(manager)
                     .build();
-            System.out.println(torrentFile.getStringMap().get("announce"));
             TorrentState state = new TorrentState();
             HttpTracker httpTracker = new HttpTracker(httpClient, (String) torrentFile.getStringMap().get("announce"),
                     "-JP0001-456726789357", 6969, state);
-            torrentFile.hash();
-            InputStream is = httpTracker.announce(torrentFile.getByteHash());
-
-//            BDecoder decoder = new BDecoder()
-            BDecoder decoder = new BDecoder(is, "UTF-8");
-            BDict dict = decoder.decodeDict();
-            Map<String, Object> dictMap = dict.getValue();
-//            BS
-//            System.out.println(dict.stringify());
-            BString peers = (BString) dictMap.get("peers");
-            System.out.println(Arrays.toString(peers.getValue()));
-//            byte[] readBytes = new byte[1000];
-//            is.read(readBytes);
-//
-//            System.out.println(Arrays.toString(readBytes));
-
+//            torrentFile.hash();
+            System.out.println(torrentFile.hash());
+            AnnounceResponse announceResponse = httpTracker.announce(torrentFile.getByteHash());
+            if (!announceResponse.hasFailed()) {
+                List<String> peers = (List<String>) announceResponse.getAnnounceMap().get("peers");
+                for (String peer : peers) {
+                    System.out.println(peer);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

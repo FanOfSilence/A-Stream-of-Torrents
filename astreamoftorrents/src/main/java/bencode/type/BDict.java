@@ -2,6 +2,7 @@ package bencode.type;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class BDict<T extends Map> implements BType {
     @Override
     public Map<String, Object> stringify() {
         Map<String, Object> newDict = new LinkedHashMap<>();
+//        Map<String, Object> newDict = new HashMap<>();
         for (Map.Entry<String, BType> entry : dict.entrySet()) {
 //            dict.put( entry.getKey(), entry.getValue().stringify());
             newDict.put(entry.getKey(), entry.getValue().stringify());
@@ -31,6 +33,7 @@ public class BDict<T extends Map> implements BType {
     @Override
     public Map<String, Object> getValue() {
         Map<String, Object> newDict = new LinkedHashMap<>();
+//        Map<String, Object> newDict = new HashMap<>();
         for (Map.Entry<String, BType> entry : dict.entrySet()) {
             newDict.put(entry.getKey(), entry.getValue().getValue());
         }
