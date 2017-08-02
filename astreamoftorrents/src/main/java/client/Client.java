@@ -1,3 +1,5 @@
+package client;
+
 /**
  * Created by Jesper on 2017-06-17.
  */

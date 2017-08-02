@@ -53,14 +53,8 @@ public class BDecoder {
             if (!isNumber(next)) {
                 throw new Exception("Integer can only contain numbers");
             }
-            if (next - UTF_OFFSET == 45 || next - UTF_OFFSET == '-') {
-                System.out.println("awdadwa");
-            }
             result += next - UTF_OFFSET;
             next = inputStream.read();
-        }
-        if (result >= 1343715223) {
-            System.out.println("So it did!");
         }
         return new BInteger(result);
     }
@@ -75,9 +69,6 @@ public class BDecoder {
         int next = peek();
         while (next != DICT_POSTFIX) {
             String key = decodeByteString().stringify();
-            if (key.equals("length")) {
-                System.out.println("STOP HERE");
-            }
             BType value = decodeObject();
             dict.put(key, value);
             next = peek();
@@ -88,11 +79,7 @@ public class BDecoder {
 
     public BString decodeByteString() throws IOException, Exception {
         int length = getStringLength();
-
-
         byte[] b = new byte[length];
-
-        int read = 0;
         inputStream.read(b, 0, length);
         return new BString(b, charset);
     }

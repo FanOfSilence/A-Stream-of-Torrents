@@ -4,7 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import torrent.ReadableTorrentState;
+import torrent.state.ReadableTorrentState;
 import tracker.response.http.AnnounceResponse;
 import tracker.response.http.ConciseResponse;
 

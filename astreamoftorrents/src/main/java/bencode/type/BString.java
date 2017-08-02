@@ -8,7 +8,6 @@ import java.nio.charset.Charset;
  * Created by Jesper on 2017-07-19.
  */
 public class BString<T extends String> implements BType {
-    private String encodedString;
     private byte[] byteString;
     private Charset charset;
 
@@ -34,6 +33,7 @@ public class BString<T extends String> implements BType {
     public void encode(OutputStream os) {
 
     }
+
     @Override
     public String toString() {
         return "BString";

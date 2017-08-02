@@ -2,11 +2,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import peer.PeerWireProtocol;
-import torrent.TorrentFile;
-import torrent.TorrentState;
+import torrent.file.TorrentFile;
+import torrent.state.TorrentState;
 import tracker.HttpTracker;
 import tracker.response.http.AnnounceResponse;
-import tracker.response.http.ConciseResponse;
 
 import java.io.*;
 import java.net.*;

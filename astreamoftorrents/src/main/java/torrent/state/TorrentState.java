@@ -1,4 +1,4 @@
-package torrent;
+package torrent.state;
 
 /**
  * Created by Jesper on 2017-07-24.
