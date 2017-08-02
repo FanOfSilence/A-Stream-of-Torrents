@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import torrent.ReadableTorrentState;
 import tracker.response.http.AnnounceResponse;
+import tracker.response.http.ConciseResponse;
 
 import java.io.IOException;
 import java.net.URI;
@@ -60,7 +61,7 @@ public class HttpTracker {
         HttpGet get = new HttpGet(uri);
         HttpResponse response = client.execute(get);
         if (response.getStatusLine().getStatusCode() == 200) {
-            return new AnnounceResponse(response.getEntity().getContent());
+            return new ConciseResponse(response.getEntity().getContent());
         }
         throw new Exception(String.format("Got back a %d response when announcing", response.getStatusLine().getStatusCode()));
     }

@@ -1,19 +1,16 @@
-import bencode.BDecoder;
-import bencode.type.BDict;
-import bencode.type.BString;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import peer.PeerWireProtocol;
 import torrent.TorrentFile;
 import torrent.TorrentState;
 import tracker.HttpTracker;
 import tracker.response.http.AnnounceResponse;
+import tracker.response.http.ConciseResponse;
 
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -26,7 +23,7 @@ public class Main {
         Random random = new Random(100);
         int transId = random.nextInt(10000);
         try {
-            TorrentFile torrentFile = new TorrentFile("src/main/resources/mma_the_rest_on_the_flight_into_egypt_438025_archive.torrent");
+            TorrentFile torrentFile = new TorrentFile("src/main/resources/Jimmy.Kimmel.2017.07.31.Channing.Tatum.HDTV.x264-CROOKS[rartv]-[rarbg.to].torrent");
             PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
 
             CloseableHttpClient httpClient = HttpClients.custom()
@@ -44,6 +41,8 @@ public class Main {
                     System.out.println(peer);
                 }
             }
+            PeerWireProtocol peerWireProtocol = new PeerWireProtocol("-JP0001-456726789357", "129.205.128.33", 52132);
+            peerWireProtocol.handshake(torrentFile.getByteHash());
         } catch (Exception e) {
             e.printStackTrace();
         }
