@@ -9,6 +9,8 @@ import tracker.response.http.AnnounceResponse;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +20,20 @@ import java.util.Random;
 public class Main {
     private static DatagramSocket workingSocket;
     public static void main(String[] args) throws IOException {
+
+        String property = "java.io.tmpdir";
+
+        String tempDir = System.getProperty(property);
+        final String A_STREAM_OF_TORRENTS = "AStreamOfTorrents";
+
+        try {
+            if (Files.notExists(Paths.get(tempDir, A_STREAM_OF_TORRENTS))) {
+                Files.createDirectory(Paths.get(tempDir, A_STREAM_OF_TORRENTS));
+            }
+        } catch (IOException io) {
+            io.printStackTrace();
+            throw new IOException("Couldn't create a directory in temp folder");
+        }
         System.out.println(System.getProperty("user.dir"));
         Random random = new Random(100);
         int transId = random.nextInt(10000);

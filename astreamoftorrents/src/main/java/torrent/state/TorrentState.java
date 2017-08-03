@@ -11,6 +11,16 @@ public class TorrentState implements WritableTorrentState{
     private final String COMPLETED = "completed";
     private int uploaded;
     private int downloaded;
+    private final String property = "java.io.tmpdir";
+    private String tempDir;
+
+    //List<File> TODO: For writing out the actual pieces to the files
+    //File List<BitMap> TODO: For keeping track of which pieces of which files have been downloaded
+    //TODO: Piece is a class and bitmap goes from bit to Piece
+
+    public TorrentState() {
+        tempDir = System.getProperty(property) + "AStreamOfTorrents";
+    }
 
 
     private byte[] pieces;

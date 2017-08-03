@@ -5,6 +5,7 @@ import bencode.BEncoder;
 import bencode.type.BDict;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import torrent.piece.Piece;
 
 import java.io.*;
 import java.util.*;
@@ -21,7 +22,7 @@ public class TorrentFile implements ReadableTorrentFile {
     private Map<String, Object> infoMap;
     private Map<String, Object> stringMap;
     private File file;
-    private List<byte[]> pieceList;
+    private List<Piece> pieceList;
 
     public TorrentFile(String path) throws Exception {
         file = new File(path);
@@ -67,8 +68,9 @@ public class TorrentFile implements ReadableTorrentFile {
     }
 
     @Override
-    public List<byte[]> getPieceList() {
+    public List<Piece> getPieceList() {
         if (pieceList == null) {
+            int pieceLength = (int) infoMap.get("piece length");
             byte[] pieces = (byte[]) infoMap.get("pieces");
             pieceList = new ArrayList<>(pieces.length / 20);
             for (int i = 0; i < pieces.length; i += 20) {
@@ -76,7 +78,11 @@ public class TorrentFile implements ReadableTorrentFile {
                 for (int j = 0; j < addBytes.length; j++) {
                     addBytes[j] = pieces[i];
                 }
-                pieceList.add(addBytes);
+                if (i + 1 == pieces.length) {
+                    pieceList.add(new Piece(0, addBytes, true));
+                } else {
+                    pieceList.add(new Piece(pieceLength, addBytes, false));
+                }
             }
         }
         return pieceList;
