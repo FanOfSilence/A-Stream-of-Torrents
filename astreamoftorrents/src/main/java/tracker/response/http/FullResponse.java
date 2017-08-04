@@ -1,5 +1,6 @@
 package tracker.response.http;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,8 +9,18 @@ import java.util.Map;
 //TODO: Implement this class in case Concise response is not possible
 public class FullResponse implements AnnounceResponse {
     @Override
+    public List<String> getPeers() {
+        return null;
+    }
+
+    @Override
     public boolean hasFailed() {
         return false;
+    }
+
+    @Override
+    public int getTimeout() {
+        return 0;
     }
 
     @Override

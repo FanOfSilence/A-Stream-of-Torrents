@@ -42,8 +42,18 @@ public class ConciseResponse implements AnnounceResponse {
     }
 
     @Override
+    public List<String> getPeers() {
+        return null;
+    }
+
+    @Override
     public boolean hasFailed() {
         return announceMap.containsKey("failure reason");
+    }
+
+    @Override
+    public int getTimeout() {
+        return 0;
     }
 
     @Override
