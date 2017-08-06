@@ -1,11 +1,13 @@
 package torrent.state;
 
+import java.util.Observable;
+
 /**
  * Created by Jesper on 2017-07-24.
  */
 
 //TODO: Have one constructor for torrent piece length for a new torrent and one for the bytes already downloaded
-public class TorrentState implements WritableTorrentState{
+public class TorrentState extends Observable implements WritableTorrentState {
     private final String STARTED = "started";
     private final String STOPPED = "stopped";
     private final String COMPLETED = "completed";
